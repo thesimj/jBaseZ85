@@ -38,7 +38,7 @@ import java.util.Arrays;
  * Author: Bubelich Mykola
  * Date: 2015-05-17
  *
- * Implementation of Base64 data encoding/decoding
+ * Implementation of BaseZ85 data encoding/decoding
  *
  * @author Bubelich Mykola (bubelich.com)
  * @link https://github.com/thesimj/jBaseZ85 (github)
