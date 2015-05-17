@@ -39,7 +39,7 @@ import org.junit.Test;
  * Date: 2015-05-17
  *
  * JUnit 4 Tests
- * Implementation of Base64 data encoding/decoding
+ * Implementation of BaseZ85 data encoding/decoding
  *
  * @author Bubelich Mykola (bubelich.com)
  * @link https://github.com/thesimj/jBaseZ85 (github)
