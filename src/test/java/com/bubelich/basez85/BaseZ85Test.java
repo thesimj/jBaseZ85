@@ -32,12 +32,9 @@
 package com.bubelich.basez85;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.logging.Logger;
 
 /**
  * Author: Bubelich Mykola
@@ -136,52 +133,5 @@ public class BaseZ85Test extends Assert{
 
         // Encode 1027 byte (3 byte padding) //
         assertArrayEquals("Test 1027 (3 byte padding) random byte encode -> decode", seed_test, BaseZ85.decode(BaseZ85.encode(seed_test)));
-    }
-
-    @Ignore
-    @Test
-    public void test_size() throws Exception{
-
-        // Kryptos text //
-        String seed_string ="EMUFPHZLRFAXYUSDJKZLDKRNSHGNFIVJ\n" +
-                            "YQTQUXQBQVYUVLLTREVJYQTMKYRDMFD\n" +
-                            "VFPJUDEEHZWETZYVGWHKKQETGFQJNCE\n" +
-                            "GGWHKK?DQMCPFQZDQMMIAGPFXHQRLG\n" +
-                            "TIMVMZJANQLVKQEDAGDVFRPJUNGEUNA\n" +
-                            "QZGZLECGYUXUEENJTBJLBQCRTBJDFHRR\n" +
-                            "YIZETKZEMVDUFKSJHKFWHKUWQLSZFTI\n" +
-                            "HHDDDUVH?DWKBFUFPWNTDFIYCUQZERE\n" +
-                            "EVLDKFEZMOQQJLTTUGSYQPFEUNLAVIDX\n" +
-                            "FLGGTEZ?FKZBSFDQVGOGIPUFXHHDRKF\n" +
-                            "FHQNTGPUAECNUVPDJMQCLQUMUNEDFQ\n" +
-                            "ELZZVRRGKFFVOEEXBDMVPNFQXEZLGRE\n" +
-                            "DNQFMPNZGLFLPMRJQYALMGNUVPDXVKP\n" +
-                            "DQUMEBEDMHDAFMJGZNUPLGEWJLLAETGE\n" +
-                            "NDYAHROHNLSRHEOCPTEOIBIDYSHNAIA\n" +
-                            "CHTNREYULDSLLSLLNOHSNOSMRWXMNE\n" +
-                            "TPRNGATIHNRARPESLNNELEBLPIIACAE\n" +
-                            "WMTWNDITEENRAHCTENEUDRETNHAEOE\n" +
-                            "TFOLSEDTIWENHAEIOYTEYQHEENCTAYCR\n" +
-                            "EIFTBRSPAMHHEWENATAMATEGYEERLB\n" +
-                            "TEEFOASFIOTUETUAEOTOARMAEERTNRTI\n" +
-                            "BSEDDNIAAHTTMSTEWPIEROAGRIEWFEB\n" +
-                            "AECTDDHILCEIHSITEGOEAOSDDRYDLORIT\n" +
-                            "RKLMLEHAGTDHARDPNEOHMGFMFEUHE\n" +
-                            "ECDMRIPFEIMEHNLSSTTRTVDOHW?OBKR\n" +
-                            "UOXOGHULBSOLIFBBWFLRVQQPRNGKSSO\n" +
-                            "TWTQSJQSSEKZZWATJKLUDIAWINFBNYP\n" +
-                            "VTTMZFPKWGDKZXTJCDIGKUHUAUEKCAR";
-
-//        byte [] seed_test = seed_string.concat(seed_string.concat(seed_string)).getBytes("UTF-8");
-        byte [] seed_test = SecureRandom.getSeed(1024 * 1024);
-
-        // Encode by Base64 //
-        String b64 = Base64.getEncoder().encodeToString(seed_test);
-
-        // Encode to BaseZ85 //
-        String bz85 = BaseZ85.encode(seed_test);
-
-        // Show results //
-        Logger.getAnonymousLogger().info(String.format("Base64 length: %d, BaseZ85 length: %d", b64.length(), bz85.length()));
     }
 }
