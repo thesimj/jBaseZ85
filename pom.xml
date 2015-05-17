@@ -6,11 +6,16 @@
 
     <groupId>com.bubelich</groupId>
     <artifactId>BaseZ85</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 
     <packaging>jar</packaging>
 
     <url>https://github.com/thesimj/jBaseZ85</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>4.12</junit.version>
+    </properties>
 
     <dependencies>
         <dependency>
