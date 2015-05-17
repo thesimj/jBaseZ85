@@ -34,8 +34,6 @@ package com.bubelich.basez85;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.security.SecureRandom;
-
 /**
  * Author: Bubelich Mykola
  * Date: 2015-05-17
@@ -110,28 +108,39 @@ public class BaseZ85Test extends Assert{
     @Test
     public void test_full_cycle() throws Exception {
 
+        int tlen = 1024;
+
         // Generate random data //
-        byte [] seed_test = SecureRandom.getSeed(1024);
+        byte [] seed_test = seedRandomByte(tlen);
 
         // Encode 1024 byte (no padding) //
         assertArrayEquals("Test 1024 random byte encode -> decode",seed_test,BaseZ85.decode(BaseZ85.encode(seed_test)));
 
         // Generate random data //
-        seed_test = SecureRandom.getSeed(1025);
+        seed_test = seedRandomByte(tlen + 1);
 
         // Encode 1025 byte (1 byte padding) //
         assertArrayEquals("Test 1025 (1 byte padding) random byte encode -> decode",seed_test,BaseZ85.decode(BaseZ85.encode(seed_test)));
 
         // Generate random data //
-        seed_test = SecureRandom.getSeed(1026);
+        seed_test = seedRandomByte(tlen + 2);
 
         // Encode 1026 byte (2 byte padding) //
         assertArrayEquals("Test 1026 (2 byte padding) random byte encode -> decode",seed_test,BaseZ85.decode(BaseZ85.encode(seed_test)));
 
         // Generate random data //
-        seed_test = SecureRandom.getSeed(1027);
+        seed_test = seedRandomByte(tlen+3);
 
         // Encode 1027 byte (3 byte padding) //
         assertArrayEquals("Test 1027 (3 byte padding) random byte encode -> decode", seed_test, BaseZ85.decode(BaseZ85.encode(seed_test)));
+    }
+
+    private byte [] seedRandomByte(int length){
+        byte [] seeds = new byte[length];
+
+        for (int i = 0; i < length; i++)
+            seeds[i] = (byte) (Math.random() * 256);
+
+        return seeds;
     }
 }
