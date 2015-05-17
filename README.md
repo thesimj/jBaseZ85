@@ -29,8 +29,11 @@ System.out.println("BaseZ85 encoded data: " + encdata); // BaseZ85 encoded data:
 ### Decoding:
 <code>
 import com.bubelich.basez85;
+
 String encdata = "nm=QNzY&b1^)hc";
+
 byte [] data = BaseZ85.decode(encdata);
+
 System.out.println("BaseZ85 decoded data: " + new String(data)); // BaseZ85 decoded data: Hello World
 </code>
 

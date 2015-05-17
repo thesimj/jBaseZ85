@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2015, Bubelich Mykola
+* Copyright (c) 2015, Bubelich Mykola (bubelich.com)
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,17 @@ import com.sun.istack.internal.Nullable;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+/**
+ * Author: Bubelich Mykola
+ * Date: 2015-05-17
+ *
+ * Implementation of Base64 data encoding/decoding
+ *
+ * @author Bubelich Mykola (bubelich.com)
+ * @link https://github.com/thesimj/jBaseZ85 (github)
+ */
 public class BaseZ85 {
+
     private final static char [] alphabets = {
             '0','1','2','3','4','5','6','7','8','9',
             'a','b','c','d','e','f','g','h','i','j',
@@ -58,9 +68,6 @@ public class BaseZ85 {
             33,34,35,79,0,80};
 
     private final static int    rev_alphabets_shift = 33;
-
-
-//    final static long [] tms = new long[]{0x31C84B1,0x95EED,0x1C39,0x55,0x01};
 
     @Nullable
     private static char[] encodeQuarter(byte[] data){
@@ -111,22 +118,32 @@ public class BaseZ85 {
         return out;
     }
 
+    /**
+     * Encode the string into BaseZ85 format.
+     *
+     * @param input Array of byte to encode.
+     * @return The encoded String or null
+     */
     @Nullable
-    public static String encode(byte [] data){
+    public static String encode(byte [] input){
 
-        int length = data.length;
+        // check input len > 0 or null//
+        if(input == null || input.length == 0)
+            return null;
+
+        int length = input.length;
         int index = 0;
         byte [] buff = new byte[4];
 
-        StringBuilder sb = new StringBuilder( (data.length * 5/4) + 1);
+        StringBuilder sb = new StringBuilder( (input.length * 5/4) + 1);
 
         while (length >= 4 ) {
 
-            // copy data to buff //
-            buff[3] = data[index++];
-            buff[2] = data[index++];
-            buff[1] = data[index++];
-            buff[0] = data[index++];
+            // copy input to buff //
+            buff[3] = input[index++];
+            buff[2] = input[index++];
+            buff[1] = input[index++];
+            buff[0] = input[index++];
 
             sb.append(encodeQuarter(buff));
 
@@ -138,9 +155,8 @@ public class BaseZ85 {
 
             buff = new byte[length];
 
-            for (int i = length-1; i >= 0; i--) {
-                buff[i] = data[index++];
-            }
+            for (int i = length-1; i >= 0; i--)
+                buff[i] = input[index++];
 
             sb.append(encodePadding(buff));
         }
@@ -148,17 +164,31 @@ public class BaseZ85 {
         return sb.toString();
     }
 
-//    -- DECODE SECTION -- //
-
+    /**
+     * Decodes a BaseZ85 encoded string.
+     *
+     * @param input The encoded BaseZ85 String.
+     * @return The decoded array of bytes.  Null if error or invalid input was received.
+     */
     @Nullable
-    public static byte[] decode(String data){
-        return decode(data.toCharArray());
+    public static byte[] decode(String input){
+        return decode(input.toCharArray());
     }
 
+    /**
+     * Decodes a BaseZ85 encoded string.
+     *
+     * @param input The encoded BaseZ85 String.
+     * @return The decoded array of bytes.  Null if error or invalid input was received.
+     */
     @Nullable
-    public static byte[] decode(char [] data){
+    public static byte[] decode(char [] input){
 
-        int length = data.length;
+        // check input len > 0 or null//
+        if(input == null || input.length == 0)
+            return null;
+
+        int length = input.length;
         int index = 0;
 
         char[] buff = new char[5];
@@ -167,26 +197,26 @@ public class BaseZ85 {
 
         while (length >= 5){
 
-            buff[0] = data[index++];
-            buff[1] = data[index++];
-            buff[2] = data[index++];
-            buff[3] = data[index++];
-            buff[4] = data[index++];
+            buff[0] = input[index++];
+            buff[1] = input[index++];
+            buff[2] = input[index++];
+            buff[3] = input[index++];
+            buff[4] = input[index++];
 
             bytebuff.put(decodeQuarter(buff));
 
             length -= 5;
         }
 
-        // If length > 0 Then need padding //
+        // If last length > 0 Then need padding //
         if(length > 0) {
 
             // create padding buffer //
             char [] padding = new char[length];
 
-            // copy last data value to padding buffer //
+            // copy last input value to padding buffer //
             for (int i = 0; i < length; i++)
-                padding[i] = data[index++];
+                padding[i] = input[index++];
 
             // decode padding //
             bytebuff.put(decodePadding(padding));
