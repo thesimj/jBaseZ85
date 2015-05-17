@@ -1,6 +1,38 @@
+/*
+* Copyright (c) 2015, Bubelich Mykola
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions are met:
+*
+* Redistributions of source code must retain the above copyright notice,
+* this list of conditions and the following disclaimer.
+*
+* Redistributions in binary form must reproduce the above copyright notice,
+* this list of conditions and the following disclaimer in the documentation
+* and/or other materials provided with the distribution.
+*
+* Neither the name of the copyright holder nor the names of its contributors
+* may be used to endorse or promote products derived from this software without
+* specific prior written permission.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS "AS IS"
+* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+* POSSIBILITY OF SUCH DAMAGE.
+*/
+
 package com.bubelich.basez85;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.security.SecureRandom;
@@ -14,16 +46,16 @@ public class BaseZ85Test extends Assert{
 
         // Without padding, normal hello world :) //
         byte [] in_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B};
-        assertEquals("Assert first HelloWorld","HelloWorld",BaseZ85.encode(in_test));
+        assertEquals("Assert first HelloWorld", "HelloWorld", BaseZ85.encode(in_test));
 
 
         // With 1-th padding //
         in_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B, (byte) 0xAF};
-        assertEquals("With 1 byte padding","HelloWorld52",BaseZ85.encode(in_test));
+        assertEquals("With 1 byte padding", "HelloWorld52", BaseZ85.encode(in_test));
 
         // With 2-th padding //
         in_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B, (byte) 0xAF, (byte) 0xBF};
-        assertEquals("With 2 byte padding","HelloWorldqj6",BaseZ85.encode(in_test));
+        assertEquals("With 2 byte padding", "HelloWorldqj6", BaseZ85.encode(in_test));
 
         // With 3-th padding //
         in_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B, (byte) 0xAF, (byte) 0xBF, (byte) 0xCF};
@@ -44,7 +76,7 @@ public class BaseZ85Test extends Assert{
                         "CV^9Zp<!yAd4/Xb0k*$*&A&nJXQ<MkK!>&}x#)cTlf[" +
                         "Bu8v].4}L}1:^-@qDS{";
 
-        assertEquals("Full byte field test",tststr,BaseZ85.encode(in_test));
+        assertEquals("Full byte field test", tststr, BaseZ85.encode(in_test));
 
     }
 
@@ -94,10 +126,10 @@ public class BaseZ85Test extends Assert{
         seed_test = SecureRandom.getSeed(1027);
 
         // Encode 1027 byte (3 byte padding) //
-        assertArrayEquals("Test 1027 (3 byte padding) random byte encode -> decode",seed_test,BaseZ85.decode(BaseZ85.encode(seed_test)));
+        assertArrayEquals("Test 1027 (3 byte padding) random byte encode -> decode", seed_test, BaseZ85.decode(BaseZ85.encode(seed_test)));
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void test_size() throws Exception{
 
@@ -142,23 +174,5 @@ public class BaseZ85Test extends Assert{
 
         // Show results //
         Logger.getAnonymousLogger().info(String.format("Base64 length: %d, BaseZ85 length: %d", b64.length(), bz85.length()));
-
-    }
-
-    @Test
-    public void test_bouncey_cypto() {
-
-        try {
-
-            BaseZ85.bouncyEncryption();
-
-            // ALL OK //
-            assertTrue(true);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-
     }
 }

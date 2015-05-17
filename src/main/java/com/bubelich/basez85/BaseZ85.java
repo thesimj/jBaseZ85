@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2015, Bubelich Mykola, m@bubelich.com
+* Copyright (c) 2015, Bubelich Mykola
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -32,17 +32,8 @@
 package com.bubelich.basez85;
 
 import com.sun.istack.internal.Nullable;
-import org.bouncycastle.asn1.x9.X9ECParameters;
-import org.bouncycastle.crypto.ec.CustomNamedCurves;
-import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.spec.ECParameterSpec;
 
-import javax.crypto.KeyAgreement;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
-import java.security.*;
 import java.util.Arrays;
 
 public class BaseZ85 {
@@ -172,7 +163,7 @@ public class BaseZ85 {
 
         char[] buff = new char[5];
 
-        ByteBuffer retbuff = ByteBuffer.allocate( (length * 4/5) );
+        ByteBuffer bytebuff = ByteBuffer.allocate( (length * 4/5) );
 
         while (length >= 5){
 
@@ -182,12 +173,12 @@ public class BaseZ85 {
             buff[3] = data[index++];
             buff[4] = data[index++];
 
-            retbuff.put(decodeQuarter(buff));
+            bytebuff.put(decodeQuarter(buff));
 
             length -= 5;
         }
 
-        // If length > 0 Then Need padding //
+        // If length > 0 Then need padding //
         if(length > 0) {
 
             // create padding buffer //
@@ -198,13 +189,13 @@ public class BaseZ85 {
                 padding[i] = data[index++];
 
             // decode padding //
-            retbuff.put(decodePadding(padding));
+            bytebuff.put(decodePadding(padding));
         }
 
-        retbuff.flip();
+        bytebuff.flip();
 
-        return retbuff.limit() > 0 ?
-                Arrays.copyOf(retbuff.array(), retbuff.limit())
+        return bytebuff.limit() > 0 ?
+                Arrays.copyOf(bytebuff.array(), bytebuff.limit())
                 : null;
     }
 
@@ -247,101 +238,4 @@ public class BaseZ85 {
 
         return buff;
     }
-
-    public static void bouncyEncryption() throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException {
-        // Add provider //
-        Security.addProvider(new BouncyCastleProvider());
-
-//        Provider[] prov = Security.getProviders();
-//
-//        for (Object ks : prov[10].keySet()){
-//            if(ks.toString().startsWith("KeyAgreement"))
-//                System.out.println(ks);
-//        }
-
-        // Get Curves name //
-//        for(String names : ECNamedCurveTable.getNames())
-//                System.out.println(names);
-//        Enumeration<String> curves = ECNamedCurveTable.getNames();
-//
-//        while (curves.hasMoreElements())
-//            System.out.println(curves.nextElement());
-//
-
-        // Generate Keys
-
-
-        X9ECParameters cpam = CustomNamedCurves.getByName("curve25519");
-//        X9ECParameters cpam = CustomNamedCurves.getByName("secp192r1");
-        ECParameterSpec curve = new ECParameterSpec(cpam.getCurve(),cpam.getG(),cpam.getN(),cpam.getH(),cpam.getSeed());
-//        ECParameterSpec curve = ECNamedCurveTable.getParameterSpec("secp128r2");
-
-        KeyPairGenerator keypairgen = KeyPairGenerator.getInstance("ECDH", "BC");
-
-        keypairgen.initialize(curve,new SecureRandom());
-
-        KeyPair keys_alice  = keypairgen.generateKeyPair();
-        KeyPair keys_bob    = keypairgen.generateKeyPair();
-
-
-        // Shows keys //
-        System.out.println(String.format("Alice keys: %s %s",
-                keys_alice.getPublic(),
-                keys_alice.getPrivate()));
-
-        System.out.println(String.format("Alice keys: Public: [%d] %s",
-                BaseZ85.encode(keys_alice.getPublic().getEncoded()).length(),
-                BaseZ85.encode(keys_alice.getPublic().getEncoded())));
-
-        System.out.println(String.format("Alice keys: Private: [%d] %s",
-                BaseZ85.encode(keys_alice.getPrivate().getEncoded()).length(),
-                BaseZ85.encode(keys_alice.getPrivate().getEncoded())));
-
-        System.out.println(String.format("Bob keys: %s %s",
-                keys_bob.getPublic(),
-                keys_bob.getPrivate()));
-
-        System.out.println(String.format("Bob keys: Public: [%d] %s",
-                BaseZ85.encode(keys_bob.getPublic().getEncoded()).length(),
-                BaseZ85.encode(keys_bob.getPublic().getEncoded())));
-
-        System.out.println(String.format("Bob keys: Private: [%d] %s",
-                BaseZ85.encode(keys_bob.getPrivate().getEncoded()).length(),
-                BaseZ85.encode(keys_bob.getPrivate().getEncoded())));
-
-
-        // Create Key Agreement for Alice //
-        KeyAgreement ka_alice = KeyAgreement.getInstance("ECDH","BC");
-
-        ka_alice.init(keys_alice.getPrivate());
-        ka_alice.doPhase(keys_bob.getPublic(), true);
-
-        SecretKey sk_alice = new SecretKeySpec(ka_alice.generateSecret(),"ECDH");
-
-
-        // Create Key Agreement for Bob //
-        KeyAgreement ka_bob = KeyAgreement.getInstance("ECDH","BC");
-
-        ka_alice.init(keys_bob.getPrivate());
-        ka_alice.doPhase(keys_alice.getPublic(), true);
-
-        SecretKey sk_bob = new SecretKeySpec(ka_alice.generateSecret(),"ECDH");
-
-        if(!Arrays.equals(sk_alice.getEncoded(),sk_bob.getEncoded()))
-            throw new InvalidKeyException("Secret not match!");
-
-        System.out.println(String.format("Secret key: [%d] %s",
-                BaseZ85.encode(sk_bob.getEncoded()).length(),
-                BaseZ85.encode(sk_bob.getEncoded())));
-
-        //X509EncodedKeySpec xs = new X509EncodedKeySpec(keys_bob.getPublic().getEncoded());
-        //System.out.println(ASN1Dump.dumpAsString(keys_bob.getPublic().getEncoded()));
-
-        BCECPublicKey spk = (BCECPublicKey) keys_alice.getPublic();
-//        new ECPublicKeySpec()
-        //spk.g
-        //spk.
-
-    }
-
 }
