@@ -48,6 +48,15 @@ public class BaseZ85Test extends Assert{
         byte [] in_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B};
         assertEquals("Assert first HelloWorld", "HelloWorld", BaseZ85.encode(in_test));
 
+//        byte [] data = "Hello World".getBytes();
+//        String encdata = BaseZ85.encode(data);
+//
+//        System.out.println("BaseZ85 encoded data: " + encdata);
+
+
+        String encdata = "nm=QNzY&b1^)hc";
+        byte [] data = BaseZ85.decode(encdata);
+        System.out.println("BaseZ85 decoded data: " + new String(data));
 
         // With 1-th padding //
         in_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B, (byte) 0xAF};
