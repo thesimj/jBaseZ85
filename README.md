@@ -10,7 +10,7 @@ intervals, and may not maintain white space. Thus, only the 95 printable ASCII c
 
 The ZeroMQ project uses a slightly modified representation of base85 in ASCII so it can be better embedded 
 in XML Strings. It is called Z85 and use the characters 
-<code>0…9, a…z, A…Z,., -, :, +, =, ^, !, /, *, ?, &, <, >, (, ), [, ], {, }, @, %, $, #.</code>
+``0…9, a…z, A…Z,., -, :, +, =, ^, !, /, *, ?, &, <, >, (, ), [, ], {, }, @, %, $, #.``
 
 ## Installation
 
@@ -21,21 +21,21 @@ Import src file /src/test/java/com/bubelich/basez85/BaseZ85Test.java for JUnit 4
 
 ### Encoding:
 
-``
+```java
 import com.bubelich.basez85;
 byte [] data = "Hello world!".getBytes();
 String encdata = BaseZ85.encode(data);
 System.out.println("BaseZ85 encoded data: " + encdata); // BaseZ85 encoded data: nm=QNzY&b1^)hc
-``
+```
 
 ### Decoding:
 
-``
+```java
 import com.bubelich.basez85;
 String encdata = "nm=QNzY&b1^)hc";
 byte [] data = BaseZ85.decode(encdata);
 System.out.println("BaseZ85 decoded data: " + new String(data)); // BaseZ85 decoded data: Hello World
-``
+```
 
 ## Which specification to use?
 
