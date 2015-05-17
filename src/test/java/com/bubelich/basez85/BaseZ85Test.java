@@ -139,7 +139,7 @@ public class BaseZ85Test extends Assert{
         byte [] seeds = new byte[length];
 
         for (int i = 0; i < length; i++)
-            seeds[i] = (byte) (Math.random() * 256);
+            seeds[i] = (byte) (Math.random() * 0xFF);
 
         return seeds;
     }

@@ -1,4 +1,5 @@
 # Java implementation of ZeroMQ Base-85 encoding
+[![Build Status](https://travis-ci.org/thesimj/jBaseZ85.png?branch=master)](https://travis-ci.org/thesimj/jBaseZ85)
 
 ZeroMQ Base85 encoder/decoder written in Java.
 
