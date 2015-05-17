@@ -20,23 +20,19 @@ Import src file /src/test/java/com/bubelich/basez85/BaseZ85Test.java for JUnit 4
 
 ### Encoding:
 
-<code>
 import com.bubelich.basez85;
 
 byte [] data = "Hello world!".getBytes();
 String encdata = BaseZ85.encode(data);
 System.out.println("BaseZ85 encoded data: " + encdata); // BaseZ85 encoded data: nm=QNzY&b1^)hc
-</code>
 
 ### Decoding:
 
-<code>
 import com.bubelich.basez85;
 
 String encdata = "nm=QNzY&b1^)hc";
 byte [] data = BaseZ85.decode(encdata);
 System.out.println("BaseZ85 decoded data: " + new String(data)); // BaseZ85 decoded data: Hello World
-</code>
 
 ## Which specification to use?
 
