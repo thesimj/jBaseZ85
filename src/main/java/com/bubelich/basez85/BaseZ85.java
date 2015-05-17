@@ -31,8 +31,6 @@
 
 package com.bubelich.basez85;
 
-import com.sun.istack.internal.Nullable;
-
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -69,7 +67,6 @@ public class BaseZ85 {
 
     private final static int    rev_alphabets_shift = 33;
 
-    @Nullable
     private static char[] encodeQuarter(byte[] data){
 
         long value = (data[0] & 0x00000000000000FFL) |
@@ -88,7 +85,6 @@ public class BaseZ85 {
         return out;
     }
 
-    @Nullable
     private static char[] encodePadding(byte [] data){
 
         long value = 0;
@@ -124,7 +120,7 @@ public class BaseZ85 {
      * @param input Array of byte to encode.
      * @return The encoded String or null
      */
-    @Nullable
+//    @Nullable
     public static String encode(byte [] input){
 
         // check input len > 0 or null//
@@ -170,7 +166,6 @@ public class BaseZ85 {
      * @param input The encoded BaseZ85 String.
      * @return The decoded array of bytes.  Null if error or invalid input was received.
      */
-    @Nullable
     public static byte[] decode(String input){
         return decode(input.toCharArray());
     }
@@ -181,7 +176,6 @@ public class BaseZ85 {
      * @param input The encoded BaseZ85 String.
      * @return The decoded array of bytes.  Null if error or invalid input was received.
      */
-    @Nullable
     public static byte[] decode(char [] input){
 
         // check input len > 0 or null//
