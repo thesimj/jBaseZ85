@@ -10,31 +10,35 @@ intervals, and may not maintain white space. Thus, only the 95 printable ASCII c
 
 The ZeroMQ project uses a slightly modified representation of base85 in ASCII so it can be better embedded 
 in XML Strings. It is called Z85 and use the characters 
-``0…9, a…z, A…Z,., -, :, +, =, ^, !, /, *, ?, &, <, >, (, ), [, ], {, }, @, %, $, #.``
+``0-9, a-z, A-Z,., -, :, +, =, ^, !, /, *, ?, &, <, >, (, ), [, ], {, }, @, %, $, #.``
 
 ## Installation
 
-Import src file /src/main/java/com/bubelich/basez85/BaseZ85.java for main class.
-Import src file /src/test/java/com/bubelich/basez85/BaseZ85Test.java for JUnit 4.0 tests.
+```
+Import src file /src/main/java/com/bubelich/jBaseZ85.java for main class.
+Import src file /src/test/java/com/bubelich/jBaseZ85Test.java for JUnit 4.0 tests.
+```
 
 ## Usage
 
 ### Encoding:
 
 ```java
-import com.bubelich.basez85;
+import com.bubelich;
+...
 byte [] data = "Hello world!".getBytes();
-String encdata = BaseZ85.encode(data);
-System.out.println("BaseZ85 encoded data: " + encdata); // BaseZ85 encoded data: nm=QNzY&b1^)hc
+String encdata = jBaseZ85.encode(data);
+System.out.println("jBaseZ85 encoded data: " + encdata); // jBaseZ85 encoded data: nm=QNzY&b1^)hc
 ```
 
 ### Decoding:
 
 ```java
-import com.bubelich.basez85;
+import com.bubelich;
+...
 String encdata = "nm=QNzY&b1^)hc";
-byte [] data = BaseZ85.decode(encdata);
-System.out.println("BaseZ85 decoded data: " + new String(data)); // BaseZ85 decoded data: Hello World
+byte [] data = jBaseZ85.decode(encdata);
+System.out.println("jBaseZ85 decoded data: " + new String(data)); // jBaseZ85 decoded data: Hello World
 ```
 
 ## Which specification to use?

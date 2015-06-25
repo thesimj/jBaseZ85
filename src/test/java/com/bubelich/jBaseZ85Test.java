@@ -29,7 +29,7 @@
 * POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.bubelich.basez85;
+package com.bubelich;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,31 +39,31 @@ import org.junit.Test;
  * Date: 2015-05-17
  *
  * JUnit 4 Tests
- * Implementation of BaseZ85 data encoding/decoding
+ * Implementation of jBaseZ85 data encoding/decoding
  *
  * @author Bubelich Mykola (bubelich.com)
  * @link https://github.com/thesimj/jBaseZ85 (github)
  */
-public class BaseZ85Test extends Assert{
+public class jBaseZ85Test extends Assert{
 
-    @Test
-    public void test_encode() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void testEncode() throws Exception {
 
         // Without padding, normal hello world :) //
         byte [] in_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B};
-        assertEquals("Assert first HelloWorld", "HelloWorld", BaseZ85.encode(in_test));
+        assertEquals("Assert first HelloWorld", "HelloWorld", jBaseZ85.encode(in_test));
 
         // With 1-th padding //
         in_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B, (byte) 0xAF};
-        assertEquals("With 1 byte padding", "HelloWorld52", BaseZ85.encode(in_test));
+        assertEquals("With 1 byte padding", "HelloWorld52", jBaseZ85.encode(in_test));
 
         // With 2-th padding //
         in_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B, (byte) 0xAF, (byte) 0xBF};
-        assertEquals("With 2 byte padding", "HelloWorldqj6", BaseZ85.encode(in_test));
+        assertEquals("With 2 byte padding", "HelloWorldqj6", jBaseZ85.encode(in_test));
 
         // With 3-th padding //
         in_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B, (byte) 0xAF, (byte) 0xBF, (byte) 0xCF};
-        assertEquals("With 3 byte padding","HelloWorld-e:i",BaseZ85.encode(in_test));
+        assertEquals("With 3 byte padding","HelloWorld-e:i", jBaseZ85.encode(in_test));
 
         // Test all byte variation //
         in_test = new byte[256];
@@ -80,33 +80,35 @@ public class BaseZ85Test extends Assert{
                         "CV^9Zp<!yAd4/Xb0k*$*&A&nJXQ<MkK!>&}x#)cTlf[" +
                         "Bu8v].4}L}1:^-@qDS{";
 
-        assertEquals("Full byte field test", tststr, BaseZ85.encode(in_test));
+        assertEquals("Full byte field test", tststr, jBaseZ85.encode(in_test));
+
+        jBaseZ85.encode(null);
 
     }
 
     @Test
-    public void test_decode() throws Exception {
+    public void testDecode() throws Exception {
 
         // Without padding, normal hello world :) //
         byte [] out_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B};
-        assertArrayEquals("Assert first HelloWorld", out_test, BaseZ85.decode("HelloWorld"));
+        assertArrayEquals("Assert first HelloWorld", out_test, jBaseZ85.decode("HelloWorld"));
 
         // With 1-th padding //
         out_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B, (byte) 0xAF};
-        assertArrayEquals("With 1 byte padding", out_test, BaseZ85.decode("HelloWorld52"));
+        assertArrayEquals("With 1 byte padding", out_test, jBaseZ85.decode("HelloWorld52"));
 
         // With 2-th padding //
         out_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B, (byte) 0xAF, (byte) 0xBF};
-        assertArrayEquals("With 2 byte padding", out_test, BaseZ85.decode("HelloWorldqj6"));
+        assertArrayEquals("With 2 byte padding", out_test, jBaseZ85.decode("HelloWorldqj6"));
 
         // With 3-th padding //
         out_test = new byte[]{(byte) 0x86, (byte) 0x4F, (byte) 0xD2, (byte) 0x6F, (byte) 0xB5, (byte) 0x59, (byte) 0xF7, (byte) 0x5B, (byte) 0xAF, (byte) 0xBF, (byte) 0xCF};
-        assertArrayEquals("With 3 byte padding", out_test, BaseZ85.decode("HelloWorld-e:i"));
+        assertArrayEquals("With 3 byte padding", out_test, jBaseZ85.decode("HelloWorld-e:i"));
 
     }
 
     @Test
-    public void test_full_cycle() throws Exception {
+    public void testFullCycle() throws Exception {
 
         int tlen = 1024;
 
@@ -114,25 +116,25 @@ public class BaseZ85Test extends Assert{
         byte [] seed_test = seedRandomByte(tlen);
 
         // Encode 1024 byte (no padding) //
-        assertArrayEquals("Test 1024 random byte encode -> decode",seed_test,BaseZ85.decode(BaseZ85.encode(seed_test)));
+        assertArrayEquals("Test 1024 random byte encode -> decode", seed_test, jBaseZ85.decode(jBaseZ85.encode(seed_test)));
 
         // Generate random data //
         seed_test = seedRandomByte(tlen + 1);
 
         // Encode 1025 byte (1 byte padding) //
-        assertArrayEquals("Test 1025 (1 byte padding) random byte encode -> decode",seed_test,BaseZ85.decode(BaseZ85.encode(seed_test)));
+        assertArrayEquals("Test 1025 (1 byte padding) random byte encode -> decode",seed_test, jBaseZ85.decode(jBaseZ85.encode(seed_test)));
 
         // Generate random data //
         seed_test = seedRandomByte(tlen + 2);
 
         // Encode 1026 byte (2 byte padding) //
-        assertArrayEquals("Test 1026 (2 byte padding) random byte encode -> decode",seed_test,BaseZ85.decode(BaseZ85.encode(seed_test)));
+        assertArrayEquals("Test 1026 (2 byte padding) random byte encode -> decode",seed_test, jBaseZ85.decode(jBaseZ85.encode(seed_test)));
 
         // Generate random data //
         seed_test = seedRandomByte(tlen+3);
 
         // Encode 1027 byte (3 byte padding) //
-        assertArrayEquals("Test 1027 (3 byte padding) random byte encode -> decode", seed_test, BaseZ85.decode(BaseZ85.encode(seed_test)));
+        assertArrayEquals("Test 1027 (3 byte padding) random byte encode -> decode", seed_test, jBaseZ85.decode(jBaseZ85.encode(seed_test)));
     }
 
     private byte [] seedRandomByte(int length){
